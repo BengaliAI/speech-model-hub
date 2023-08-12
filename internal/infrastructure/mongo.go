@@ -2,7 +2,6 @@ package infrastructure
 
 import (
 	"context"
-	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -143,14 +142,14 @@ func setupUniques(db *MongoDB) {
 	setUniqueIndex(db, "users", bson.D{{Key: "email", Value: 1}})
 }
 
-func GetDBInstance() (*MongoDB, error) {
+func GetDBInstance(mongoURL string, databaseName string) (*MongoDB, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URI")))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
 	if err != nil {
 		return nil, err
 	}
-	internalDB := client.Database(os.Getenv("MONGO_DB"))
+	internalDB := client.Database(databaseName)
 	db := &MongoDB{internalDB: internalDB}
 	setupUniques(db)
 	return db, nil

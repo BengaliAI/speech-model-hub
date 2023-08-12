@@ -74,12 +74,12 @@ func (repo *ModelRepository) AddAIModel(model domains.AIModelInfo) (domains.AIMo
 	return model, nil
 }
 
-func GetModelRepository() domains.ModelRepositoryInterface {
-	db, err := GetDBInstance()
+func GetModelRepository(mongoURL string, databaseName string) (domains.ModelRepositoryInterface, error) {
+	db, err := GetDBInstance(mongoURL, databaseName)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	return &ModelRepository{
 		db: db,
-	}
+	}, nil
 }
