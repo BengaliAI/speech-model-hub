@@ -139,7 +139,9 @@ func (db *MongoDB) ReturnLatest(collectionName string, filter bson.D, opts *opti
 }
 
 func setupUniques(db *MongoDB) {
-	setUniqueIndex(db, "users", bson.D{{Key: "email", Value: 1}})
+	setUniqueIndex(db, "models", bson.D{{Key: "url", Value: 1}})
+	setUniqueIndex(db, "models", bson.D{{Key: "display_name", Value: 1}})
+	setUniqueIndex(db, "models", bson.D{{Key: "name", Value: 1}})
 }
 
 func GetDBInstance(mongoURL string, databaseName string) (*MongoDB, error) {

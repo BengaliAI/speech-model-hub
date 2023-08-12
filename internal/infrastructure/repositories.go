@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"speech-model-hub/internal/domains"
+	"speech-model-hub/internal/utils"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -11,7 +12,7 @@ type ModelRepository struct {
 }
 
 func (repo *ModelRepository) GetModelList() ([]domains.AIModelInfo, error) {
-	result, err := repo.db.FindManyFromDB("models", bson.D{})
+	result, err := repo.db.FindManyFromDB("models", bson.D{{Key: "active", Value: true}})
 	if err != nil {
 		return []domains.AIModelInfo{}, err
 	}
@@ -22,18 +23,26 @@ func (repo *ModelRepository) GetModelList() ([]domains.AIModelInfo, error) {
 		if err != nil {
 			return []domains.AIModelInfo{}, err
 		}
+		err = utils.ValidateStruct(temp)
+		if err != nil {
+			return []domains.AIModelInfo{}, err
+		}
 		models = append(models, temp)
 	}
 	return models, nil
 }
 
-func (repo *ModelRepository) GetModelByName(name string) (domains.AIModelInfo, error) {
+func (repo *ModelRepository) GetModelByDisplayName(name string) (domains.AIModelInfo, error) {
 	result, err := repo.db.FindOneFromDB("models", bson.D{{Key: "display_name", Value: name}})
 	if err != nil {
 		return domains.AIModelInfo{}, err
 	}
 	var model domains.AIModelInfo
 	err = BSONMToStruct(result, &model)
+	if err != nil {
+		return domains.AIModelInfo{}, err
+	}
+	err = utils.ValidateStruct(model)
 	if err != nil {
 		return domains.AIModelInfo{}, err
 	}
@@ -50,6 +59,10 @@ func (repo *ModelRepository) GetModelByArchitecture(architecture string) (domain
 	if err != nil {
 		return domains.AIModelInfo{}, err
 	}
+	err = utils.ValidateStruct(model)
+	if err != nil {
+		return domains.AIModelInfo{}, err
+	}
 	return model, nil
 }
 
@@ -63,11 +76,36 @@ func (repo *ModelRepository) GetModelByAuthor(author string) (domains.AIModelInf
 	if err != nil {
 		return domains.AIModelInfo{}, err
 	}
+	err = utils.ValidateStruct(model)
+	if err != nil {
+		return domains.AIModelInfo{}, err
+	}
+	return model, nil
+}
+
+func (repo *ModelRepository) GetModelByName(name string) (domains.AIModelInfo, error) {
+	result, err := repo.db.FindOneFromDB("models", bson.D{{Key: "name", Value: name}})
+	if err != nil {
+		return domains.AIModelInfo{}, err
+	}
+	var model domains.AIModelInfo
+	err = BSONMToStruct(result, &model)
+	if err != nil {
+		return domains.AIModelInfo{}, err
+	}
+	err = utils.ValidateStruct(model)
+	if err != nil {
+		return domains.AIModelInfo{}, err
+	}
 	return model, nil
 }
 
 func (repo *ModelRepository) AddAIModel(model domains.AIModelInfo) (domains.AIModelInfo, error) {
-	err := repo.db.InsertIntoDB("models", model)
+	err := utils.ValidateStruct(model)
+	if err != nil {
+		return domains.AIModelInfo{}, err
+	}
+	err = repo.db.InsertIntoDB("models", model)
 	if err != nil {
 		return domains.AIModelInfo{}, err
 	}

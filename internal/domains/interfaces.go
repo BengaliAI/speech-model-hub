@@ -4,6 +4,7 @@ import "mime/multipart"
 
 type ModelRepositoryInterface interface {
 	GetModelList() ([]AIModelInfo, error)
+	GetModelByDisplayName(name string) (AIModelInfo, error)
 	GetModelByName(name string) (AIModelInfo, error)
 	GetModelByArchitecture(architecture string) (AIModelInfo, error)
 	GetModelByAuthor(author string) (AIModelInfo, error)

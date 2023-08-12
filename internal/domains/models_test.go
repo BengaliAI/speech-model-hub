@@ -11,6 +11,10 @@ func (db *DummyDB) GetModelList() ([]AIModelInfo, error) {
 	return []AIModelInfo{}, nil
 }
 
+func (db *DummyDB) GetModelByDisplayName(name string) (AIModelInfo, error) {
+	return AIModelInfo{}, nil
+}
+
 func (db *DummyDB) GetModelByName(name string) (AIModelInfo, error) {
 	return AIModelInfo{}, nil
 }
