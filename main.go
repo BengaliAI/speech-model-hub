@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"speech-model-hub/internal/apis"
+	"speech-model-hub/internal/configs"
 	"speech-model-hub/internal/infrastructure"
 	"speech-model-hub/internal/services"
 	"speech-model-hub/pkg/loggerFx"
@@ -23,34 +24,20 @@ func NewGINApp() *gin.Engine {
 	return app
 }
 
-type Configs struct {
-	fx.Out
-
-	MongoDBURL   string `name:"mongo_url"`
-	DatabaseName string `name:"database_name"`
-}
-
-func NewConfigs() Configs {
-	return Configs{
-		MongoDBURL:   "mongodb://localhost:27017",
-		DatabaseName: "test",
-	}
-}
-
-func Provide() fx.Option {
+func Provides() fx.Option {
 	return fx.Provide(
 		NewGINApp,
-		NewConfigs,
+		configs.NewConfig,
 	)
 }
 
-func Invoke(lifecycle fx.Lifecycle, app *gin.Engine, apiHandler *apis.SpeechHandler) {
+func Invokes(lifecycle fx.Lifecycle, app *gin.Engine, apiHandler *apis.SpeechHandler, config configs.AppConfig) {
 	lifecycle.Append(
 		fx.Hook{
 			OnStart: func(context.Context) error {
 				app.GET("/", home)
 				apiHandler.RegisterRouterGroup("/models", app)
-				go app.Run(":8080")
+				go app.Run(":" + "8080")
 				return nil
 			},
 			OnStop: func(context.Context) error {
@@ -62,12 +49,12 @@ func Invoke(lifecycle fx.Lifecycle, app *gin.Engine, apiHandler *apis.SpeechHand
 
 func main() {
 	fx.New(
-		Provide(),
+		Provides(),
 		apis.Module,
 		services.Module,
 		infrastructure.Module,
 		loggerFx.Module,
-		fx.Invoke(Invoke),
+		fx.Invoke(Invokes),
 	).Run()
 
 }

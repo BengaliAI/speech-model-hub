@@ -2,12 +2,12 @@ package infrastructure
 
 import (
 	"context"
+	"speech-model-hub/internal/configs"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.uber.org/fx"
 )
 
 type MongoDB struct {
@@ -145,21 +145,14 @@ func setupUniques(db *MongoDB) {
 	setUniqueIndex(db, "models", bson.D{{Key: "name", Value: 1}})
 }
 
-type DBParams struct {
-	fx.In
-
-	MongoURL     string `name:"mongo_url"`
-	DatabaseName string `name:"database_name"`
-}
-
-func NewDBInstance(p DBParams) *MongoDB {
+func NewDBInstance(cfg configs.AppConfig) *MongoDB {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(p.MongoURL))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.MongoDB.MongoDBURL))
 	if err != nil {
 		panic(err)
 	}
-	internalDB := client.Database(p.DatabaseName)
+	internalDB := client.Database(cfg.MongoDB.DatabaseName)
 	db := &MongoDB{internalDB: internalDB}
 	setupUniques(db)
 	return db

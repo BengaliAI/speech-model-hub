@@ -21,3 +21,6 @@
 go.work
 speech-model-hub
 tmp/
+env.*.toml
+!env.example.toml
+bin/

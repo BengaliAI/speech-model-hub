@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"reflect"
+	"speech-model-hub/internal/configs"
 	"speech-model-hub/internal/domains"
 	"speech-model-hub/pkg/loggerFx"
 	"testing"
@@ -13,11 +14,8 @@ func TestModelRepository_GetModelList(t *testing.T) {
 	type fields struct {
 		db *MongoDB
 	}
-	params := DBParams{
-		MongoURL:     "mongodb://localhost:27017",
-		DatabaseName: "test",
-	}
-	db := NewDBInstance(params)
+	cfg := configs.NewConfig()
+	db := NewDBInstance(cfg)
 	loggerFx.TestSetup()
 	tests := []struct {
 		name    string
@@ -74,11 +72,8 @@ func TestModelRepository_AddAIModel(t *testing.T) {
 	type args struct {
 		model domains.AIModelInfo
 	}
-	params := DBParams{
-		MongoURL:     "mongodb://localhost:27017",
-		DatabaseName: "test",
-	}
-	db := NewDBInstance(params)
+	cfg := configs.NewConfig()
+	db := NewDBInstance(cfg)
 
 	loggerFx.TestSetup()
 	tests := []struct {
@@ -145,11 +140,8 @@ func TestModelRepository_GetModelByDisplayName(t *testing.T) {
 	type args struct {
 		name string
 	}
-	params := DBParams{
-		MongoURL:     "mongodb://localhost:27017",
-		DatabaseName: "test",
-	}
-	db := NewDBInstance(params)
+	cfg := configs.NewConfig()
+	db := NewDBInstance(cfg)
 	loggerFx.TestSetup()
 	tests := []struct {
 		name    string
