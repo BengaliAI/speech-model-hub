@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.uber.org/fx"
 )
 
 type MongoDB struct {
@@ -145,7 +146,8 @@ func setupUniques(db *MongoDB) {
 }
 
 type DBParams struct {
-	// fx.In
+	fx.In
+
 	MongoURL     string `name:"mongo_url"`
 	DatabaseName string `name:"database_name"`
 }

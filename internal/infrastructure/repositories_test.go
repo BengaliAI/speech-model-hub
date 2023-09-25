@@ -3,7 +3,7 @@ package infrastructure
 import (
 	"reflect"
 	"speech-model-hub/internal/domains"
-	"speech-model-hub/pkg/logger"
+	"speech-model-hub/pkg/loggerFx"
 	"testing"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -18,7 +18,7 @@ func TestModelRepository_GetModelList(t *testing.T) {
 		DatabaseName: "test",
 	}
 	db := NewDBInstance(params)
-	logger.TestSetup()
+	loggerFx.TestSetup()
 	tests := []struct {
 		name    string
 		fields  fields
@@ -80,7 +80,7 @@ func TestModelRepository_AddAIModel(t *testing.T) {
 	}
 	db := NewDBInstance(params)
 
-	logger.TestSetup()
+	loggerFx.TestSetup()
 	tests := []struct {
 		name    string
 		fields  fields
@@ -150,7 +150,7 @@ func TestModelRepository_GetModelByDisplayName(t *testing.T) {
 		DatabaseName: "test",
 	}
 	db := NewDBInstance(params)
-	logger.TestSetup()
+	loggerFx.TestSetup()
 	tests := []struct {
 		name    string
 		fields  fields

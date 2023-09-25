@@ -1,4 +1,4 @@
-package logger
+package loggerFx
 
 import (
 	"time"
@@ -6,6 +6,7 @@ import (
 	ginzap "github.com/gin-contrib/zap"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
 
@@ -32,3 +33,5 @@ func TestSetup() {
 	Logger, _ := config.Build()
 	Sugar = Logger.Sugar()
 }
+
+var Module = fx.Provide(NewLogger)
