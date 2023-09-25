@@ -144,15 +144,21 @@ func setupUniques(db *MongoDB) {
 	setUniqueIndex(db, "models", bson.D{{Key: "name", Value: 1}})
 }
 
-func GetDBInstance(mongoURL string, databaseName string) (*MongoDB, error) {
+type DBParams struct {
+	// fx.In
+	MongoURL     string `name:"mongo_url"`
+	DatabaseName string `name:"database_name"`
+}
+
+func NewDBInstance(p DBParams) *MongoDB {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(p.MongoURL))
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
-	internalDB := client.Database(databaseName)
+	internalDB := client.Database(p.DatabaseName)
 	db := &MongoDB{internalDB: internalDB}
 	setupUniques(db)
-	return db, nil
+	return db
 }

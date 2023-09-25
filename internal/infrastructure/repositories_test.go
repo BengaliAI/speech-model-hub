@@ -13,7 +13,11 @@ func TestModelRepository_GetModelList(t *testing.T) {
 	type fields struct {
 		db *MongoDB
 	}
-	db, _ := GetDBInstance("mongodb://localhost:27017", "test")
+	params := DBParams{
+		MongoURL:     "mongodb://localhost:27017",
+		DatabaseName: "test",
+	}
+	db := NewDBInstance(params)
 	logger.TestSetup()
 	tests := []struct {
 		name    string
@@ -70,7 +74,12 @@ func TestModelRepository_AddAIModel(t *testing.T) {
 	type args struct {
 		model domains.AIModelInfo
 	}
-	db, _ := GetDBInstance("mongodb://localhost:27017", "test")
+	params := DBParams{
+		MongoURL:     "mongodb://localhost:27017",
+		DatabaseName: "test",
+	}
+	db := NewDBInstance(params)
+
 	logger.TestSetup()
 	tests := []struct {
 		name    string
@@ -136,7 +145,11 @@ func TestModelRepository_GetModelByDisplayName(t *testing.T) {
 	type args struct {
 		name string
 	}
-	db, _ := GetDBInstance("mongodb://localhost:27017", "test")
+	params := DBParams{
+		MongoURL:     "mongodb://localhost:27017",
+		DatabaseName: "test",
+	}
+	db := NewDBInstance(params)
 	logger.TestSetup()
 	tests := []struct {
 		name    string

@@ -4,6 +4,7 @@ import (
 	"mime/multipart"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/fx"
 )
 
 type AIModelInfo struct {
@@ -19,10 +20,10 @@ type AIModelInfo struct {
 }
 
 type AIInference struct {
-	DB            ModelRepositoryInterface
+	DB            IFModelRepository
 	URL           string
 	Authorization string
-	Request       RequestHandlerInterface
+	Request       IFRequestHandler
 }
 
 func (infObj *AIInference) sumbitRequest(url string, file *multipart.FileHeader, authorization string) (string, error) {
@@ -35,4 +36,21 @@ func (infObj *AIInference) GetInference(file *multipart.FileHeader, display_name
 		return "", err
 	}
 	return infObj.sumbitRequest(model.URL, file, model.Authorization)
+}
+
+type AIInferenceParams struct {
+	fx.In
+	DB            IFModelRepository
+	URL           string
+	Authorization string
+	Request       IFRequestHandler
+}
+
+func NewAIInference(db IFModelRepository, url string, authorization string, request IFRequestHandler) *AIInference {
+	return &AIInference{
+		DB:            db,
+		URL:           url,
+		Authorization: authorization,
+		Request:       request,
+	}
 }

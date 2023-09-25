@@ -39,10 +39,10 @@ func (infer *DummyRequestHandler) SendRequest() (string, error) {
 
 func TestInference_GetInference(t *testing.T) {
 	type fields struct {
-		DB            ModelRepositoryInterface
+		DB            IFModelRepository
 		URL           string
 		Authorization string
-		Request       RequestHandlerInterface
+		Request       IFRequestHandler
 	}
 	type args struct {
 		file         *multipart.FileHeader

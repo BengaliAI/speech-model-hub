@@ -5,10 +5,22 @@ import (
 	"speech-model-hub/internal/utils"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.uber.org/fx"
 )
 
 type ModelRepository struct {
 	db *MongoDB
+}
+
+type ModelRepositoryParams struct {
+	fx.In
+	DB *MongoDB
+}
+
+func NewModelRepository(db *MongoDB) *ModelRepository {
+	return &ModelRepository{
+		db: db,
+	}
 }
 
 func (repo *ModelRepository) GetModelList() ([]domains.AIModelInfo, error) {
@@ -110,14 +122,4 @@ func (repo *ModelRepository) AddAIModel(model domains.AIModelInfo) (domains.AIMo
 		return domains.AIModelInfo{}, err
 	}
 	return model, nil
-}
-
-func GetModelRepository(mongoURL string, databaseName string) (domains.ModelRepositoryInterface, error) {
-	db, err := GetDBInstance(mongoURL, databaseName)
-	if err != nil {
-		return nil, err
-	}
-	return &ModelRepository{
-		db: db,
-	}, nil
 }

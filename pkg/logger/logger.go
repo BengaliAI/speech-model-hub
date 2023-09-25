@@ -12,6 +12,11 @@ import (
 var Sugar *zap.SugaredLogger
 var Logger *zap.Logger
 
+func NewLogger(app *gin.Engine) *zap.SugaredLogger {
+	Setup(app)
+	return Sugar
+}
+
 func Setup(app *gin.Engine) {
 	var config zap.Config
 	config = zap.NewProductionConfig()

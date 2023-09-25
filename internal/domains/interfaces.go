@@ -2,7 +2,7 @@ package domains
 
 import "mime/multipart"
 
-type ModelRepositoryInterface interface {
+type IFModelRepository interface {
 	GetModelList() ([]AIModelInfo, error)
 	GetModelByDisplayName(name string) (AIModelInfo, error)
 	GetModelByName(name string) (AIModelInfo, error)
@@ -11,11 +11,11 @@ type ModelRepositoryInterface interface {
 	AddAIModel(model AIModelInfo) (AIModelInfo, error)
 }
 
-type InferenceInterface interface {
+type IFInference interface {
 	GetInference(file *multipart.FileHeader, display_name string) (string, error)
 	SumbitRequest(url string, file *multipart.FileHeader, authorization string) (string, error)
 }
 
-type RequestHandlerInterface interface {
+type IFRequestHandler interface {
 	SendRequest() (string, error)
 }
