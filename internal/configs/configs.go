@@ -1,7 +1,6 @@
 package configs
 
 import (
-	"fmt"
 	"os"
 	"speech-model-hub/internal/utils"
 
@@ -61,12 +60,10 @@ func (config *AppConfig) IsLocal() bool {
 }
 
 func NewConfig() AppConfig {
-	fmt.Println("Loading config...")
 	appConfig := loadConfig()
 	err := appConfig.Validate()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Config loaded successfully")
 	return appConfig
 }
