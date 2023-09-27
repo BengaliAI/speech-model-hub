@@ -36,11 +36,13 @@ func Invokes(lifecycle fx.Lifecycle, app *gin.Engine, apiHandler *apis.SpeechHan
 		fx.Hook{
 			OnStart: func(context.Context) error {
 				app.GET("/", home)
-				apiHandler.RegisterRouterGroup("/models", app)
-				go app.Run(":" + "8080")
+				apiV1 := app.Group("/api/v1")
+				apiHandler.RegisterRouterGroup("/models", apiV1)
+				go app.Run(":" + config.Port)
 				return nil
 			},
 			OnStop: func(context.Context) error {
+				// fmt.Println("OnStop") // does not print when air is used
 				return nil
 			},
 		},

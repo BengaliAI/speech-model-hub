@@ -44,7 +44,7 @@ func (handler *SpeechHandler) GetModelList(c *gin.Context) {
 
 }
 
-func (handler *SpeechHandler) RegisterRouterGroup(path string, app *gin.Engine) {
+func (handler *SpeechHandler) RegisterRouterGroup(path string, app *gin.RouterGroup) {
 	group := app.Group(path)
 	group.GET("/", handler.GetModelList)
 }
