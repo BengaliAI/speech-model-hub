@@ -18,7 +18,7 @@ type MongoConfig struct {
 	DatabaseName string `name:"database_name" mapstructure:"database_name" validate:"required"`
 }
 
-func loadConfig() AppConfig {
+func loadConfig(path string) AppConfig {
 	env := os.Getenv("ENVIRONMENT")
 	if env == "PRODUCTION" {
 		viper.SetConfigName("env.production")
@@ -29,7 +29,7 @@ func loadConfig() AppConfig {
 		viper.SetConfigName("env.local")
 	}
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./")
+	viper.AddConfigPath(path)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
@@ -60,7 +60,16 @@ func (config *AppConfig) IsLocal() bool {
 }
 
 func NewConfig() AppConfig {
-	appConfig := loadConfig()
+	appConfig := loadConfig("./")
+	err := appConfig.Validate()
+	if err != nil {
+		panic(err)
+	}
+	return appConfig
+}
+
+func NewTestConfig(path string) AppConfig {
+	appConfig := loadConfig(path)
 	err := appConfig.Validate()
 	if err != nil {
 		panic(err)

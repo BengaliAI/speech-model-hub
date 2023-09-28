@@ -10,8 +10,12 @@ var Module = fx.Module(
 	"services",
 	fx.Provide(
 		fx.Annotate(
-			NewInferenceRequestHandler,
-			fx.As(new(domains.IFRequestHandler)),
+			NewServiceHandler,
+			fx.As(new(domains.IFServices)),
 		),
 	),
 )
+
+func NewServiceHandler() *ServiceHandler {
+	return &ServiceHandler{}
+}

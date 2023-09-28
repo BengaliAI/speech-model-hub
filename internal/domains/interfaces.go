@@ -1,6 +1,8 @@
 package domains
 
-import "mime/multipart"
+import (
+	"mime/multipart"
+)
 
 type IFModelRepository interface {
 	GetModelList() ([]AIModelInfo, error)
@@ -11,11 +13,7 @@ type IFModelRepository interface {
 	AddAIModel(model AIModelInfo) (AIModelInfo, error)
 }
 
-type IFInference interface {
-	GetInference(file *multipart.FileHeader, display_name string) (string, error)
-	SumbitRequest(url string, file *multipart.FileHeader, authorization string) (string, error)
-}
-
-type IFRequestHandler interface {
-	SendRequest() (string, error)
+type IFServices interface {
+	SendRequest(AIModelInfo, *multipart.FileHeader) (string, error)
+	SaveFile(*multipart.FileHeader) (string, error)
 }

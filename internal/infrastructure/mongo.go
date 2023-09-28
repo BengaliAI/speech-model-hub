@@ -2,7 +2,6 @@ package infrastructure
 
 import (
 	"context"
-	"speech-model-hub/internal/configs"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -143,17 +142,4 @@ func setupUniques(db *MongoDB) {
 	setUniqueIndex(db, "models", bson.D{{Key: "url", Value: 1}})
 	setUniqueIndex(db, "models", bson.D{{Key: "display_name", Value: 1}})
 	setUniqueIndex(db, "models", bson.D{{Key: "name", Value: 1}})
-}
-
-func NewDBInstance(cfg configs.AppConfig) *MongoDB {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.MongoDB.MongoDBURL))
-	if err != nil {
-		panic(err)
-	}
-	internalDB := client.Database(cfg.MongoDB.DatabaseName)
-	db := &MongoDB{internalDB: internalDB}
-	setupUniques(db)
-	return db
 }

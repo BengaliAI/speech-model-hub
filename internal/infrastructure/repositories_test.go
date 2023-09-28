@@ -7,6 +7,7 @@ import (
 	"speech-model-hub/pkg/loggerFx"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -14,9 +15,10 @@ func TestModelRepository_GetModelList(t *testing.T) {
 	type fields struct {
 		db *MongoDB
 	}
-	cfg := configs.NewConfig()
+	cfg := configs.NewTestConfig("../../")
 	db := NewDBInstance(cfg)
-	loggerFx.TestSetup()
+	app := gin.New()
+	loggerFx.TestSetup(app)
 	tests := []struct {
 		name    string
 		fields  fields
@@ -72,10 +74,10 @@ func TestModelRepository_AddAIModel(t *testing.T) {
 	type args struct {
 		model domains.AIModelInfo
 	}
-	cfg := configs.NewConfig()
+	cfg := configs.NewTestConfig("../../")
 	db := NewDBInstance(cfg)
-
-	loggerFx.TestSetup()
+	app := gin.New()
+	loggerFx.TestSetup(app)
 	tests := []struct {
 		name    string
 		fields  fields
@@ -140,9 +142,10 @@ func TestModelRepository_GetModelByDisplayName(t *testing.T) {
 	type args struct {
 		name string
 	}
-	cfg := configs.NewConfig()
+	cfg := configs.NewTestConfig("../../")
 	db := NewDBInstance(cfg)
-	loggerFx.TestSetup()
+	app := gin.New()
+	loggerFx.TestSetup(app)
 	tests := []struct {
 		name    string
 		fields  fields

@@ -56,3 +56,21 @@ func TestValidateStruct(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateUUID4(t *testing.T) {
+	tests := []struct {
+		name string
+		want string
+	}{
+		{
+			name: "case-1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GenerateUUID4(); len(got) != 36 {
+				t.Errorf("GenerateUUID4() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

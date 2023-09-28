@@ -1,10 +1,7 @@
 package domains
 
 import (
-	"mime/multipart"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.uber.org/fx"
 )
 
 type AIModelInfo struct {
@@ -17,40 +14,4 @@ type AIModelInfo struct {
 	Active        bool                `json:"active" bson:"active" validate:"required"`
 	UpdatedAt     primitive.Timestamp `json:"updated_at" bson:"updated_at" validate:"required"`
 	CreatedAt     primitive.Timestamp `json:"created_at" bson:"created_at" validate:"required"`
-}
-
-type AIInference struct {
-	DB            IFModelRepository
-	URL           string
-	Authorization string
-	Request       IFRequestHandler
-}
-
-func (infObj *AIInference) sumbitRequest(url string, file *multipart.FileHeader, authorization string) (string, error) {
-	return "", nil
-}
-
-func (infObj *AIInference) GetInference(file *multipart.FileHeader, display_name string) (string, error) {
-	model, err := infObj.DB.GetModelByDisplayName(display_name)
-	if err != nil {
-		return "", err
-	}
-	return infObj.sumbitRequest(model.URL, file, model.Authorization)
-}
-
-type AIInferenceParams struct {
-	fx.In
-	DB            IFModelRepository
-	URL           string
-	Authorization string
-	Request       IFRequestHandler
-}
-
-func NewAIInference(db IFModelRepository, url string, authorization string, request IFRequestHandler) *AIInference {
-	return &AIInference{
-		DB:            db,
-		URL:           url,
-		Authorization: authorization,
-		Request:       request,
-	}
 }
