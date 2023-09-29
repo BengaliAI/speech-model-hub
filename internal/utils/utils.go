@@ -78,8 +78,8 @@ func CreateDirIfNotExist(path string) error {
 	return nil
 }
 
-func SendPOSTRequest[T interface{}](url, authToken, contentType string, body interface{}) (T, error) {
-	var res T
+func SendPOSTRequestJSON[RET interface{}](url, authToken, contentType string, body interface{}) (RET, error) {
+	var res RET
 	payload, err := json.Marshal(body)
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
@@ -93,6 +93,32 @@ func SendPOSTRequest[T interface{}](url, authToken, contentType string, body int
 		return res, err
 	}
 	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+
+func SendPOSTRequestForm[RET interface{}](url, authToken, contentType string, body *bytes.Buffer) (RET, error) {
+	var res RET
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", url, body)
+	if err != nil {
+		return res, err
+	}
+	req.Header.Set("Content-Type", contentType)
+	req.Header.Set("Authorization", authToken)
+	req.Header.Set("Accept", "application/json")
+	resp, err := client.Do(req)
+	if err != nil {
+		return res, err
+	}
+	defer resp.Body.Close()
+
+	// resBody, err := io.ReadAll(resp.Body)
+	// fmt.Println(string(resBody))
 
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {

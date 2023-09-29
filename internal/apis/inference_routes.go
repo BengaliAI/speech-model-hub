@@ -13,7 +13,7 @@ import (
 type SpeechHandler struct {
 	logger  *zap.SugaredLogger
 	repo    domains.IFModelRepository
-	service domains.IFServices // Not needed, services should be called in domain models
+	service domains.IFServices
 }
 
 func (handler *SpeechHandler) GetModelList(c *gin.Context) {
@@ -31,8 +31,8 @@ func (handler *SpeechHandler) GetModelList(c *gin.Context) {
 }
 
 type InferenceRequest struct {
-	DisplayName string                `json:"display_name" binding:"required" form:"display_name"`
-	File        *multipart.FileHeader `json:"file" binding:"required" form:"file"`
+	DisplayName string                `binding:"required" form:"display_name"`
+	File        *multipart.FileHeader `binding:"required" form:"file"`
 }
 
 func (handler *SpeechHandler) GetInference(c *gin.Context) {
