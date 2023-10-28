@@ -6,7 +6,7 @@
         Talk
       </button>
       <button v-else @click="stop()"
-        class="bg-gradient-to-r from-cyan-500 to-teal-400 hover:from-teal-400 hover:to-cyan-500 text-white font-semibold rounded-xl px-6 py-2 shadow-md transition duration-300 ease-in-out">
+        class="bg-gradient-to-r from-pink-400 to-amber-500 hover:from-amber-500 hover:to-pink-400 text-white font-semibold rounded-xl px-6 py-2 shadow-md transition duration-300 ease-in-out">
         Stop
       </button>
     </div>
