@@ -5,6 +5,7 @@ import (
 	"speech-model-hub/internal/apis"
 	"speech-model-hub/internal/configs"
 	"speech-model-hub/internal/infrastructure"
+	"speech-model-hub/internal/middlewares"
 	"speech-model-hub/internal/services"
 	"speech-model-hub/pkg/loggerFx"
 
@@ -20,6 +21,7 @@ func NewGINApp() *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	app := gin.New()
 	// app.Use(gin.Logger())
+	app.Use(middlewares.CORSMiddleware())
 	app.Use(gin.Recovery())
 	return app
 }
