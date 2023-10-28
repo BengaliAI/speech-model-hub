@@ -28,6 +28,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { uploadAudio } from '@/utils/uploader'
 
 const selected = ref('')
 const startAnimation = ref(false)
@@ -35,6 +36,8 @@ const startAnimation = ref(false)
 const printBlobInfo = (blobURL: any, blob: Blob) => {
   console.log(blobURL, blob)
   startAnimation.value = false
+  const res = uploadAudio(blob, "test")
+  console.log(res)
 }
 
 const options = [
