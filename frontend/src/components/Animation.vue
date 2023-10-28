@@ -37,8 +37,6 @@ function randomDuration(mean, std) {
 </script>
   
 <style scoped>
-#bars {}
-
 .bar {
     background: #52467b;
     bottom: 1px;
