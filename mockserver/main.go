@@ -3,6 +3,7 @@ package main
 import (
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,7 @@ func main() {
 			return
 		}
 
+		time.Sleep(2 * time.Second)
 		c.JSON(http.StatusOK, gin.H{
 			"file_size":  len(fileBytes),
 			"transcript": "Hello World!",
