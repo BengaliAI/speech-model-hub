@@ -15,3 +15,11 @@ export const uploadAudio = async (blob: Blob, displayName: string) => {
     return response.data;
     };
 
+
+export const getModels = async () => {
+      const response = await axios.get('http://localhost:8080/api/v1/models/', {headers: {
+        'Content-Type': 'application/json',
+      }});
+      return response.data;
+  }
+  

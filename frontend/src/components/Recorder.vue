@@ -40,7 +40,8 @@ const emits = defineEmits(["recordStart", "recordStop"]);
 
 // Loading is fully controlled by the parent
 const props = defineProps({
-  loading: Boolean
+  loading: Boolean,
+  ready: Boolean
 });
 
 const newAudioURL = computed(() => {
@@ -48,6 +49,10 @@ const newAudioURL = computed(() => {
 });
 
 const record = async () => {
+  if (props.ready === false) {
+    alert("Please select a model");
+    return;
+  }
   newAudio.value = null;
 
   const stream = await navigator.mediaDevices.getUserMedia({
