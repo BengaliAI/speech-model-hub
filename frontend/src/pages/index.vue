@@ -9,15 +9,16 @@
           <select
             class="w-full h-10 px-3 m-6 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline justify-center items-center self-center"
             v-model="selected">
-            <option disabled value="" class="text-sm">Select Model</option>
+            <option disabled value="" class="text-sm">Model</option>
             <option v-for="option in options" :value="option.value" class="text-sm">
               {{ option.text }}
             </option>
           </select>
         </div>
         <div class="flex flex-col justify-center items-center">
-          <Animation :startAnimation="startAnimation" class="m-6 p-6 h-20 w-full"></Animation>
-          <Recorder @recordStop="printBlobInfo" @recordStart="startAnimation = true" class="m-6 p-6 w-full h-auto">
+          <Animation :startAnimation="startAnimation" class="mx-6 my-0 p-6 h-20 w-full"></Animation>
+          <Recorder :loading="loadingSpinner" @recordStop="printBlobInfo" @recordStart="startAnimation = true"
+            class="p-2 w-full h-auto">
           </Recorder>
         </div>
       </div>
@@ -32,11 +33,14 @@ import { uploadAudio } from '@/utils/uploader'
 
 const selected = ref('')
 const startAnimation = ref(false)
+let loadingSpinner = ref(false)
 
-const printBlobInfo = (blobURL: any, blob: Blob) => {
+const printBlobInfo = async (blobURL: any, blob: Blob) => {
   console.log(blobURL, blob)
   startAnimation.value = false
-  const res = uploadAudio(blob, "test")
+  loadingSpinner.value = true
+  const res = await uploadAudio(blob, "test")
+  loadingSpinner.value = false
   console.log(res)
 }
 
