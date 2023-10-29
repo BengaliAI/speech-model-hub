@@ -10,15 +10,15 @@
             class="w-full h-10 px-3 m-6 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline justify-center items-center self-center"
             v-model="selected">
             <option disabled value="" class="text-sm">Model</option>
-            <option v-for="option in options" :value="option.value" class="text-sm">
-              {{ option.text }}
+            <option v-for="opt in options" :value="opt.value" class="text-sm">
+              {{ opt.text }}
             </option>
           </select>
         </div>
         <div class="flex flex-col justify-center items-center">
           <Animation :startAnimation="startAnimation" class="mx-6 my-0 p-6 h-20 w-full"></Animation>
           <Recorder :loading="loadingSpinner" @recordStop="printBlobInfo" @recordStart="startAnimation = true"
-            class="p-2 w-full h-auto">
+            :ready="selected !== ''" class="p-2 w-full h-auto">
           </Recorder>
         </div>
       </div>
@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { uploadAudio } from '@/utils/uploader'
+import { uploadAudio, getModels } from '@/utils/uploader'
 
 const selected = ref('')
 const startAnimation = ref(false)
@@ -39,15 +39,23 @@ const printBlobInfo = async (blobURL: any, blob: Blob) => {
   console.log(blobURL, blob)
   startAnimation.value = false
   loadingSpinner.value = true
-  const res = await uploadAudio(blob, "test")
+  const res = await uploadAudio(blob, selected.value)
   loadingSpinner.value = false
   console.log(res)
 }
 
-const options = [
-  { text: 'Alberta', value: 'alberta' },
-  { text: 'Bert', value: 'bert' },
-  { text: 'Roberta', value: 'roberta' },
-]
+interface ModelData {
+  data: {
+    display_name: string,
+    name: string,
+  }[]
+}
+
+let tmp: ModelData = await getModels()
+
+let options: any[] = []
+for (let i = 0; i < tmp.data.length; i++) {
+  options.push({ text: tmp.data[i].display_name, value: tmp.data[i].display_name })
+}
 
 </script>
