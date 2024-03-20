@@ -1,8 +1,6 @@
 package services
 
 import (
-	"speech-model-hub/internal/domains"
-
 	"go.uber.org/fx"
 )
 
@@ -11,7 +9,7 @@ var Module = fx.Module(
 	fx.Provide(
 		fx.Annotate(
 			NewServiceHandler,
-			fx.As(new(domains.IFServices)),
+			fx.As(new(IFServices)),
 		),
 	),
 )

@@ -2,6 +2,7 @@ package apis
 
 import (
 	"speech-model-hub/internal/domains"
+	"speech-model-hub/internal/services"
 
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -11,10 +12,10 @@ type SpeechHandlerParams struct {
 	fx.In
 	Logger  *zap.SugaredLogger
 	Repo    domains.IFModelRepository
-	Service domains.IFServices
+	Service services.IFServices
 }
 
-func NewSpeechHandler(logger *zap.SugaredLogger, repo domains.IFModelRepository, service domains.IFServices) *SpeechHandler {
+func NewSpeechHandler(logger *zap.SugaredLogger, repo domains.IFModelRepository, service services.IFServices) *SpeechHandler {
 	return &SpeechHandler{
 		logger:  logger,
 		repo:    repo,
