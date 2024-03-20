@@ -17,6 +17,10 @@ func (infer *ServiceHandler) SendRequest(aiModel domains.AIModelInfo, fileHeader
 	}
 	file, err := fileHeader.Open()
 
+	if err != nil {
+		return "", err
+	}
+
 	defer file.Close()
 	body := &bytes.Buffer{}
 	formWriter := multipart.NewWriter(body)
@@ -25,6 +29,9 @@ func (infer *ServiceHandler) SendRequest(aiModel domains.AIModelInfo, fileHeader
 		return "", err
 	}
 	_, err = io.Copy(filePart, file)
+	if err != nil {
+		return "", err
+	}
 	err = formWriter.Close()
 	if err != nil {
 		return "", err

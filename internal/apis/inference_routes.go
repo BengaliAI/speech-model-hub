@@ -4,6 +4,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"speech-model-hub/internal/domains"
+	"speech-model-hub/internal/services"
 	"speech-model-hub/pkg/etypes"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +14,7 @@ import (
 type SpeechHandler struct {
 	logger  *zap.SugaredLogger
 	repo    domains.IFModelRepository
-	service domains.IFServices
+	service services.IFServices
 }
 
 func (handler *SpeechHandler) GetModelList(c *gin.Context) {
